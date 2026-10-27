@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}SecureBank{% endblock %} · SecureBank</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="{{ url_for('index') }}"><span class="mark">SB</span> SecureBank</a>
+  <nav>
+    {% if g.user and g.sess and g.sess['stage'] == 'full' %}
+      {% if g.user['role'] == 'admin' %}
+        <a href="{{ url_for('admin') }}">Audit &amp; users</a>
+        <a href="{{ url_for('admin_integrity') }}">Integrity</a>
+      {% else %}
+        <a href="{{ url_for('dashboard') }}">Accounts</a>
+        <a href="{{ url_for('transfer') }}">Transfer</a>
+      {% endif %}
+      <a href="{{ url_for('security_page') }}">Security</a>
+      <a href="{{ url_for('controls') }}">Controls</a>
+      <form method="post" action="{{ url_for('logout') }}" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="link">Sign out ({{ g.user['username'] }})</button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('controls') }}">Security controls</a>
+      <a href="{{ url_for('login') }}">Sign in</a>
+      <a href="{{ url_for('register') }}" class="btn small">Open account</a>
+    {% endif %}
+  </nav>
+</header>
+<main>
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, m in msgs %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  {% block body %}{% endblock %}
+</main>
+<footer>SecureBank is a security-engineering demonstration project. No real money moves. · Session auto-expires after 10 min idle.</footer>
+</body>
+</html>

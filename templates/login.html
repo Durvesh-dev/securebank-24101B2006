@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block title %}Sign in{% endblock %}
+{% block body %}
+<div class="split">
+  <section class="card narrow">
+    <h1>Sign in</h1>
+    <form method="post" autocomplete="on">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Username <input name="username" required maxlength="20" autocomplete="username" autofocus></label>
+      <label>Password <input name="password" type="password" required maxlength="128" autocomplete="current-password"></label>
+      <button class="btn">Sign in</button>
+    </form>
+    <p class="muted">New customer? <a href="{{ url_for('register') }}">Open an account</a></p>
+  </section>
+  {% if config.DEMO_MODE %}
+  <aside class="card demo">
+    <h2>Demo logins</h2>
+    <table><tr><th>Role</th><th>Username</th><th>Password</th></tr>
+      <tr><td>Customer</td><td><code>alice</code></td><td><code>Alice@SecureBank1</code></td></tr>
+      <tr><td>Customer</td><td><code>bob</code></td><td><code>Bob@SecureBank1!</code></td></tr>
+      <tr><td>Admin</td><td><code>admin</code></td><td><code>Admin@SecureBank1</code></td></tr>
+    </table>
+    <p class="muted">5 wrong passwords lock an account for 15 minutes. Errors never reveal whether a username exists.</p>
+  </aside>
+  {% endif %}
+</div>
+{% endblock %}

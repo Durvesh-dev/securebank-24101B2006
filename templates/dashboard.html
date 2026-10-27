@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Accounts{% endblock %}
+{% block body %}
+<h1>Welcome, {{ g.user['full_name'].split()[0] }}</h1>
+{% if not g.user['totp_enabled'] %}<div class="flash warn">Two-factor authentication is off. <a href="{{ url_for('security_page') }}">Turn it on</a> to protect transfers.</div>{% endif %}
+<div class="grid">
+{% for a in accounts %}
+  <a class="card acct" href="{{ url_for('account_detail', public_id=a['public_id']) }}">
+    <span class="muted">{{ a['kind'] }} · {{ mask(a['last4']) }}</span>
+    <span class="bal">{{ rupees(a['balance_paise']) }}</span>
+    <span class="muted">Available balance</span>
+  </a>
+{% endfor %}
+  <a class="card acct action" href="{{ url_for('transfer') }}"><span class="bal">→</span><span>Send money</span></a>
+</div>
+<section class="card">
+  <h2>Recent activity</h2>
+  {% include "_txns.html" %}
+</section>
+{% endblock %}

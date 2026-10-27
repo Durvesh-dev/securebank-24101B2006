@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Confirm transfer{% endblock %}
+{% block body %}
+<section class="card narrow">
+  <h1>Confirm transfer</h1>
+  <dl class="kv">
+    <dt>From</dt><dd>{{ src['kind'] }} {{ mask(src['last4']) }}</dd>
+    <dt>To</dt><dd>{{ payee }} · XXXX{{ dest['last4'] }}</dd>
+    <dt>Amount</dt><dd class="bal">{{ rupees(amount) }}</dd>
+    {% if note %}<dt>Note</dt><dd>{{ note }}</dd>{% endif %}
+  </dl>
+  <form method="post" action="{{ url_for('transfer_confirm') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="nonce" value="{{ nonce }}">
+    {% if need_otp %}<label>Authenticator code <input name="code" inputmode="numeric" maxlength="6" required autocomplete="one-time-code"></label>{% endif %}
+    <button class="btn">Confirm &amp; send</button>
+    <a href="{{ url_for('transfer') }}" class="btn ghost">Cancel</a>
+  </form>
+  <p class="muted">Details are held on the server; this page only carries a single-use reference valid for 5 minutes.</p>
+</section>
+{% endblock %}

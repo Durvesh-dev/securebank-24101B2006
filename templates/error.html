@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Error {{ code }}{% endblock %}
+{% block body %}
+<section class="card narrow">
+  <h1>{{ code }}</h1>
+  <p>{{ message }}</p>
+  <p class="muted">Reference: <code>{{ incident }}</code> — quote this if you contact support.</p>
+  <a class="btn" href="{{ url_for('index') }}">Back to safety</a>
+</section>
+{% endblock %}

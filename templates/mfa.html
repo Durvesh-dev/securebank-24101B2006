@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Verify{% endblock %}
+{% block body %}
+<section class="card narrow">
+  <h1>Two-factor verification</h1>
+  <p>Enter the 6-digit code from your authenticator app.</p>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Code <input name="code" inputmode="numeric" pattern="\d{6}" maxlength="6" required autocomplete="one-time-code" autofocus></label>
+    <button class="btn">Verify</button>
+  </form>
+</section>
+{% endblock %}

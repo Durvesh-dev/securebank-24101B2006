@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Account{% endblock %}
+{% block body %}
+<section class="card">
+  <span class="muted">{{ acct['kind'] }} account</span>
+  <h1 class="bal">{{ rupees(acct['balance_paise']) }}</h1>
+  <p>Account number: <code>{{ full_no[:4] }} {{ full_no[4:8] }} {{ full_no[8:] }}</code> · IFSC <code>SBNK0000142</code></p>
+  <p class="muted">The full account number is decrypted only for its owner, and this view is recorded in the audit log.</p>
+</section>
+<section class="card">
+  <h2>Statement (last 50)</h2>
+  {% include "_txns.html" %}
+</section>
+{% endblock %}

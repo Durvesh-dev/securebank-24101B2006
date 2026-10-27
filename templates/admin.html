@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}Admin{% endblock %}
+{% block body %}
+<h1>Administration</h1>
+<section class="card">
+  <h2>Users</h2>
+  <table><tr><th>User</th><th>Role</th><th>2FA</th><th>Status</th><th></th></tr>
+  {% for u in users %}<tr><td>{{ u['username'] }} <span class="muted">{{ u['full_name'] }}</span></td><td>{{ u['role'] }}</td>
+    <td>{{ 'on' if u['totp_enabled'] else 'off' }}</td>
+    <td>{% if u['locked_until'] > now %}<span class="pill bad">locked</span>{% else %}<span class="pill ok">active</span>{% endif %}</td>
+    <td>{% if u['locked_until'] > now %}<form method="post" action="{{ url_for('admin_unlock', uid=u['id']) }}" class="inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn small">Unlock</button></form>{% endif %}</td></tr>{% endfor %}
+  </table>
+  <p class="muted">Admins can audit and unlock, but cannot see balances or move money (separation of duties).</p>
+</section>
+<section class="card">
+  <h2>Audit log <span class="muted">(latest 100, hash-chained)</span></h2>
+  <table class="log"><tr><th>Time (IST)</th><th>User</th><th>Event</th><th>Outcome</th><th>IP</th><th>Detail</th></tr>
+  {% for l in logs %}<tr><td class="nowrap">{{ l['ts']|datefmt }}</td><td>{{ l['username'] or '—' }}</td><td><code>{{ l['event'] }}</code></td>
+  <td><span class="pill {{ 'ok' if l['outcome']=='success' else 'bad' if l['outcome'] in ('failure','denied','locked') else 'warn' }}">{{ l['outcome'] }}</span></td>
+  <td>{{ l['ip'] }}</td><td>{{ l['detail'] }}</td></tr>{% endfor %}
+  </table>
+</section>
+{% endblock %}

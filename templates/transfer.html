@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Transfer{% endblock %}
+{% block body %}
+<section class="card narrow">
+  <h1>Send money</h1>
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>From
+      <select name="from_account">
+        {% for a in accounts %}<option value="{{ a['public_id'] }}">{{ a['kind'] }} {{ mask(a['last4']) }} — {{ rupees(a['balance_paise']) }}</option>{% endfor %}
+      </select></label>
+    <label>Beneficiary account number (12 digits)
+      <input name="to_account_no" value="{{ form.get('to_account_no','') }}" inputmode="numeric" maxlength="14" required></label>
+    <label>Amount (₹) <small>max ₹1,00,000 per transfer, ₹2,00,000 per day</small>
+      <input name="amount" value="{{ form.get('amount','') }}" inputmode="decimal" maxlength="12" required></label>
+    <label>Note (optional) <input name="note" value="{{ form.get('note','') }}" maxlength="60"></label>
+    <button class="btn">Review transfer</button>
+  </form>
+  {% if config.DEMO_MODE %}<p class="muted">Tip: open another demo user's account page to copy their account number.</p>{% endif %}
+</section>
+{% endblock %}

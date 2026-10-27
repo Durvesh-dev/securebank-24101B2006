@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Integrity{% endblock %}
+{% block body %}
+<section class="card">
+  <h1>Ledger &amp; audit integrity check</h1>
+  <p>Recomputed HMAC-SHA256 over {{ tx_count }} transactions and {{ log_count }} audit rows.</p>
+  {% if not bad_tx and not bad_log %}<div class="flash ok">All signatures valid. No record has been altered or deleted.</div>
+  {% else %}<div class="flash error">Tampering detected — transactions: {{ bad_tx|join(', ') or 'none' }}; audit rows: {{ bad_log|join(', ') or 'none' }}</div>{% endif %}
+</section>
+{% endblock %}

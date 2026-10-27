@@ -1,0 +1,23 @@
+# One-click free deploy: Render Dashboard -> New -> Blueprint -> pick this repo.
+services:
+  - type: web
+    name: securebank
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # One worker: SQLite + in-memory rate limiter. Threads give concurrency.
+    startCommand: gunicorn app:app --workers 1 --threads 4 --bind 0.0.0.0:$PORT --access-logfile -
+    healthCheckPath: /healthz
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEMO_MODE
+        value: "1"
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DATA_ENCRYPTION_KEY
+        generateValue: true
+      - key: LEDGER_HMAC_KEY
+        generateValue: true
+      - key: FLASK_SECRET_KEY
+        generateValue: true

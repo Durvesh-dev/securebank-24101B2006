@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Open account{% endblock %}
+{% block body %}
+<section class="card narrow">
+  <h1>Open a savings account</h1>
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Full name <input name="full_name" value="{{ form.get('full_name','') }}" maxlength="60" required></label>
+    <label>Email <input name="email" type="email" value="{{ form.get('email','') }}" maxlength="254" required></label>
+    <label>Mobile (10 digits) <input name="phone" value="{{ form.get('phone','') }}" inputmode="numeric" maxlength="10" required></label>
+    <label>Username <small>4–20 chars: lowercase letters, digits, _</small>
+      <input name="username" value="{{ form.get('username','') }}" maxlength="20" autocomplete="username" required></label>
+    <label>Password <small>12+ chars with upper, lower, digit and symbol</small>
+      <input name="password" type="password" maxlength="128" autocomplete="new-password" required></label>
+    <label>Confirm password <input name="confirm" type="password" maxlength="128" autocomplete="new-password" required></label>
+    <button class="btn">Open account</button>
+  </form>
+  <p class="muted">Email and mobile are encrypted with AES-256-GCM before they are stored.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% if txns %}
+<table class="tx">
+  <tr><th>Date</th><th>Details</th><th class="r">Amount</th></tr>
+  {% for t in txns %}
+    {% set outgoing = t['from_account'] and (acct is not defined and t['from_user'] == g.user['id'] or acct is defined and t['from_account'] == acct['id']) %}
+    <tr>
+      <td class="nowrap">{{ t['created_at'] | datefmt }}</td>
+      <td>{% if outgoing %}To XXXX{{ t['to_last4'] }}{% else %}From XXXX{{ t['from_last4'] }}{% endif %}{% if t['note'] %} · <span class="muted">{{ t['note'] }}</span>{% endif %}</td>
+      <td class="r {{ 'neg' if outgoing else 'pos' }}">{{ '−' if outgoing else '+' }}{{ rupees(t['amount_paise']) }}</td>
+    </tr>
+  {% endfor %}
+</table>
+{% else %}<p class="muted">No transactions yet.</p>{% endif %}
